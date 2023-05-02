@@ -1,0 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Croissant+One&family=Inconsolata&family=Lobster+Two&family=Oleo+Script&family=Shrikhand&family=Suranna&family=Roboto:ital,wght@0,400;0,900;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
