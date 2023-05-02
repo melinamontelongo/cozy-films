@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import axios from "axios";
 
@@ -32,15 +32,13 @@ const AddFilm = () => {
     const onSubmit = async (values) => {
         //  User not logged in
         if (!userID) {
-            alert("You must be logged in to do that!");
             return;
         }
         //  User is logged in
         try {
             await axios.post(FILMS_ENDPOINT, { ...values, likes: 0, dislikes: 0, userOwner: userID }, { headers: { authorization: cookies.access_token } });
             setIsError(false);
-            setMessage("Film successfully added!")
-            navigate("/");
+            setMessage("Film successfully added!");
         } catch (err) {
             setIsError(true);
             setMessage("Unexpected error");
@@ -49,6 +47,7 @@ const AddFilm = () => {
             toastContainer?.current?.classList.remove("opacity-0");
             setTimeout(() => {
                 toastContainer?.current?.classList.add("opacity-0");
+                navigate("/catalog");
             }, 1200);
         }
     };
@@ -57,8 +56,8 @@ const AddFilm = () => {
             <div className="opacity-0" ref={toastContainer}>
                 <Toast isError={isError} text={message} />
             </div>
-            <div className="grid place-items-center ">
-                {!userID ? <div className="font-['Roboto'] font-bold text-4xl">You must <Link to="/auth" className="text-primary underline">sign in</Link> to add a film to our database</div>
+            <div className="grid place-items-center">
+                {!userID ? <div className="font-['Roboto'] font-bold text-4xl mt-20">You must <Link to="/auth" className="text-primary underline">sign in</Link> to add a film to our database</div>
                     :
                     <Form title="Add a new film to our database" btnText="Add film" onSubmit={handleSubmit(onSubmit)} >
                         <div className="grid md:grid-cols-2 place-items-center my-10 gap-10">

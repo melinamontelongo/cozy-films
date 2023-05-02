@@ -11,7 +11,7 @@ const FilmCollection = () => {
     return (
         <div className="container mx-auto mt-32 mb-10">
             <div className="grid place-items-center">
-                {!userID ? <div className="font-['Roboto'] font-bold text-4xl">You must <Link to="/auth" className="text-primary underline">sign in</Link> to view your collection</div>
+                {!userID ? <div className="font-['Roboto'] font-bold text-4xl mt-20">You must <Link to="/auth" className="text-primary underline">sign in</Link> to view your collection</div>
                     :
                     <>
                         {loading ? <Loader /> :
