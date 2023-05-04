@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useLayoutEffect, useState, useRef } from "react";
 
 import axios from "axios";
 
@@ -22,46 +22,19 @@ import Toast from "../components/Toast";
 import Loader from "../components/Loader";
 import SearchBar from "../components/SearchBar";
 
-
 //  Where all films present on database (DB) are displayed
 const Catalog = () => {
     //  Loading status and all films in DB
-    const { loading, films, setFilms, fetchAllFilms } = useGetFilms();
+    const { loading, films, likedFilms, dislikedFilms, setFilms, fetchLikedFilms, fetchDislikedFilms, fetchAllFilms } = useGetFilms();
     //  To show alert
     const toastContainer = useRef(null);
     const [isError, setIsError] = useState("");
     const [message, setMessage] = useState("");
-    //  To show user's liked and disliked films right away
-    const [likedFilms, setLikedFilms] = useState(null);
-    const [dislikedFilms, setDislikedFilms] = useState(null);
     //  Get credentials
     const [cookies, _] = useCookies(["access_token"]);
     const userID = useGetUserID();
     //  Form handling for search
     const { register, formState: { errors }, handleSubmit } = useForm();
-
-    const fetchLikedFilms = async () => {
-        try {
-            const response = await axios.get(`${FILMS_ENDPOINT}/likedFilms/ids/${userID}`);
-            setLikedFilms(response.data.likedFilms);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    const fetchDislikedFilms = async () => {
-        try {
-            const response = await axios.get(`${FILMS_ENDPOINT}/dislikedFilms/ids/${userID}`);
-            setDislikedFilms(response.data.dislikedFilms);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    useEffect(() => {
-        fetchLikedFilms();
-        fetchDislikedFilms();
-    }, []);
 
     const showAlert = (isError, msg) => {
         setIsError(isError);
@@ -73,16 +46,17 @@ const Catalog = () => {
     };
 
     const likeFilm = async (filmID, userID) => {
+        const likeElem = document.getElementById(`like${filmID}`);
         if (!userID) {
             return showAlert(true, "You must be logged in to do that!");
         };
         try {
+            likeElem.parentElement.style.cursor = "wait";
             const response = await axios.put(FILMS_ENDPOINT, { filmID, userID }, { headers: { authorization: cookies.access_token } });
             //  Update UI
             if (response.status === 200) {
                 fetchDislikedFilms();
                 fetchLikedFilms();
-                const likeElem = document.getElementById(`like${filmID}`);
                 likeElem.innerText = +likeElem.innerText + 1;
                 if (dislikedFilms?.includes(filmID)) {
                     const dislikeElem = document.getElementById(`dislike${filmID}`);
@@ -90,21 +64,24 @@ const Catalog = () => {
                 }
             }
         } catch (err) {
-            console.error(err);
+            showAlert(true, "You've already liked this film");
+        } finally{
+            likeElem.parentElement.style.cursor = "auto";
         }
     };
 
     const dislikeFilm = async (filmID, userID) => {
+        const dislikeElem = document.getElementById(`dislike${filmID}`);
         if (!userID) {
             return showAlert(true, "You must be logged in to do that!");
         };
         try {
+            dislikeElem.parentElement.style.cursor = "wait";
             const response = await axios.put(`${FILMS_ENDPOINT}/dislike`, { filmID, userID }, { headers: { authorization: cookies.access_token } });
             //  Update UI
             if (response.status === 200) {
                 fetchLikedFilms();
                 fetchDislikedFilms();
-                const dislikeElem = document.getElementById(`dislike${filmID}`);
                 dislikeElem.innerText = +dislikeElem.innerText + 1;
                 if (likedFilms?.includes(filmID)) {
                     const likedElem = document.getElementById(`like${filmID}`);
@@ -112,7 +89,10 @@ const Catalog = () => {
                 }
             }
         } catch (err) {
-            console.error(err);
+            showAlert(true, "You've already disliked this film");
+        }
+        finally{
+            dislikeElem.parentElement.style.cursor = "auto";
         }
     };
 
@@ -120,7 +100,7 @@ const Catalog = () => {
         const response = await axios.get(`${FILMS_ENDPOINT}/title/${value.search}`);
         setFilms(response.data);
     };
-    
+
     return (
         <div className="container mx-auto mt-32">
             <div className="opacity-0" ref={toastContainer}>
