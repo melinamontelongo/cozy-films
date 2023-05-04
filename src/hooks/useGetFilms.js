@@ -51,5 +51,5 @@ export const useGetFilms = () => {
         }
     }, [])
 
-    return { loading, films, likedFilms, dislikedFilms, fetchLikedFilms, fetchDislikedFilms, fetchAllFilms }
+    return { loading, films, likedFilms, dislikedFilms, setFilms, fetchLikedFilms, fetchDislikedFilms, fetchAllFilms }
 }
