@@ -45,9 +45,11 @@ export const useGetFilms = () => {
     }
     useEffect(() => {
         fetchAllFilms();
-        fetchLikedFilms();
-        fetchDislikedFilms();
+        if(userID){
+            fetchLikedFilms();
+            fetchDislikedFilms();
+        }
     }, [])
 
-    return { loading, films, likedFilms, dislikedFilms, setFilms, fetchAllFilms }
+    return { loading, films, likedFilms, dislikedFilms, fetchLikedFilms, fetchDislikedFilms, fetchAllFilms }
 }
