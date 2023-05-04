@@ -108,7 +108,7 @@ const Catalog = () => {
             </div>
             {loading ? <Loader /> :
                 <>
-                    <div className="flex justify-center w-1/2 mx-auto">
+                    <div className="flex justify-center md:w-1/2 mx-auto">
                         <SearchBar onSubmit={handleSubmit(handleSearch)} register={register} name="search" validation={filmValidation.search} error={errors["search"]} placeholder="Search..." />
                     </div>
                     {films?.length < 1 && <div className="font-['Roboto'] font-bold text-4xl mt-20 text-center">Found no matching results, try again or <button className="text-primary underline" onClick={() => fetchAllFilms()}>go back</button></div>}
