@@ -35,5 +35,9 @@ export const filmValidation = {
     },
     rating: {
         required: "Rating is required",
+    },
+    search: {
+        required: "Write something so we can search for it",
+        pattern: {value: /\w+/, message: "Invalid characters"}
     }
 }

@@ -7,12 +7,10 @@ const Card = ({ img, title, description, keywords, info, footer }) => {
                 <h2 className="card-title text-primary text-4xl font-['Roboto'] font-black">{title}</h2>
                 </div>
                 <div className="font-['Roboto'] ">
-                    <p className="text-xl mb-2">{info}</p>
-                    <p>
+                    <p className="text-xl mb-2">{info}</p>    
                         {keywords.split(",").map((word, i) => {
                             return <span className="badge badge-secondary font-black me-2 p-2.5 mb-2" key={`${title}keyword${i}`}>{word}</span>
                         })}
-                    </p>
                     <p>{description}</p>
                 </div>
                 <div className="card-actions justify-end">

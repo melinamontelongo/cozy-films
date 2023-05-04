@@ -10,44 +10,44 @@ export const useGetFilms = () => {
     const [dislikedFilms, setDislikedFilms] = useState(null);
     const userID = useGetUserID();
 
+    const fetchAllFilms = async () => {
+        try {
+            const response = await axios.get(FILMS_ENDPOINT);
+            setFilms(response.data);
+        } catch (err) {
+            console.error(err);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+    const fetchLikedFilms = async () => {
+        try {
+            const response = await axios.get(`${FILMS_ENDPOINT}/likedFilms/ids/${userID}`);
+            setLikedFilms(response.data.likedFilms);
+        } catch (err) {
+            console.error(err);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+    const fetchDislikedFilms = async () => {
+        try {
+            const response = await axios.get(`${FILMS_ENDPOINT}/dislikedFilms/ids/${userID}`);
+            setDislikedFilms(response.data.dislikedFilms);
+        } catch (err) {
+            console.error(err);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
     useEffect(() => {
-        const fetchAllFilms = async () => {
-            try {
-                const response = await axios.get(FILMS_ENDPOINT);
-                setFilms(response.data);
-            } catch (err) {
-                console.error(err);
-            }
-            finally {
-                setLoading(false);
-            }
-        }
-        const fetchLikedFilms = async () => {
-            try {
-                const response = await axios.get(`${FILMS_ENDPOINT}/likedFilms/ids/${userID}`);
-                setLikedFilms(response.data.likedFilms);
-            } catch (err) {
-                console.error(err);
-            }
-            finally {
-                setLoading(false);
-            }
-        }
-        const fetchDislikedFilms = async () => {
-            try {
-                const response = await axios.get(`${FILMS_ENDPOINT}/dislikedFilms/ids/${userID}`);
-                setDislikedFilms(response.data.dislikedFilms);
-            } catch (err) {
-                console.error(err);
-            }
-            finally {
-                setLoading(false);
-            }
-        }
         fetchAllFilms();
         fetchLikedFilms();
         fetchDislikedFilms();
     }, [])
 
-    return { loading, films, likedFilms, dislikedFilms }
+    return { loading, films, likedFilms, dislikedFilms, setFilms, fetchAllFilms }
 }
