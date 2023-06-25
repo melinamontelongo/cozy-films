@@ -1,2 +1,2 @@
-export const FILMS_ENDPOINT = "https://cozyfilms-api.onrender.com/films";
-export const AUTH_ENDPOINT = "https://cozyfilms-api.onrender.com/auth";
+export const FILMS_ENDPOINT = "https://cozy-films-api.vercel.app/films";
+export const AUTH_ENDPOINT = "https://cozy-films-api.vercel.app/auth";
